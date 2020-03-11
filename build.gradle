@@ -1,0 +1,48 @@
+plugins {
+    id 'application'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+mainClassName = 'com.steatoda.jax.rs.params.Demo'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation	'ch.qos.logback:logback-core:1.2.3',
+					'ch.qos.logback:logback-classic:1.2.3',
+					'org.slf4j:slf4j-api:1.7.30',
+					'com.google.inject:guice:4.2.2',
+					'com.google.inject.extensions:guice-servlet:4.2.2',
+					'com.google.inject.extensions:guice-multibindings:4.2.2',
+					'com.google.inject.extensions:guice-assistedinject:4.2.2',
+					'org.eclipse.jetty.aggregate:jetty-all:9.4.24.v20191120',
+					'javax.ws.rs:javax.ws.rs-api:2.1.1',
+					'org.jboss.resteasy:resteasy-jaxrs-all:4.5.2.Final',
+					'org.jboss.resteasy:resteasy-servlet-initializer:4.5.2.Final',
+					'org.jboss.resteasy:resteasy-guice:4.5.2.Final'
+
+}
+
+run {
+	standardInput = System.in
+}
+
+task processWar(type: Copy) {
+    from('src/main/dist/war') {
+        include '**/*'
+    }
+    into "${project.buildDir}/war/main"
+}
+
+classes {
+    classes.dependsOn processWar
+}
+
+build.dependsOn installDist
+
+distTar.enabled = false
+distZip.enabled = false
